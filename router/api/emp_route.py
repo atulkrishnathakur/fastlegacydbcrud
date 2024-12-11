@@ -47,6 +47,7 @@ def getEmployee(db:Session = Depends(get_db)):
         json_data = jsonable_encoder(results_list)
         return json_data
         '''
+        # https://docs.sqlalchemy.org/en/20/core/connections.html
         stmt = select(emp_m)
         result = db.execute(stmt)
         results_list = [dict(row._mapping) for row in result] 
