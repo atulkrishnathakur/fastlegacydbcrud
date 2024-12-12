@@ -2,7 +2,6 @@ from fastapi import APIRouter,Depends,status
 from typing import Annotated
 from sqlalchemy.orm import Session
 from database.session import get_db
-from database.dbtables import employee
 from database.dbtables.employee import emp_m
 from database.dbconnection import engine
 from fastapi import status
@@ -37,20 +36,12 @@ def getEmployee(db:Session = Depends(get_db)):
             print(dbcolumnname)
         '''
 
-
-        '''
-        # Session ka use karke query ko execute karte hain aur results ko correct format mein fetch karte hain (row._mapping ka use karke).
-        #stmt = select(emp_m.c.id,emp_m.c.menu_name)
-        stmt = select(emp_m)
-        result = db.execute(stmt)
-        results_list = [dict(row._mapping) for row in result] 
-        json_data = jsonable_encoder(results_list)
-        return json_data
-        '''
         # https://docs.sqlalchemy.org/en/20/core/connections.html
+        # row._mapping is used to correct the format
         stmt = select(emp_m)
         result = db.execute(stmt)
-        results_list = [dict(row._mapping) for row in result] 
+        # results_list = [row._mapping for row in result] # without dict it also show in dictionary
+        results_list = [dict(row._mapping) for row in result] # you can use dict()
         json_data = jsonable_encoder(results_list)
         return json_data
 

@@ -1,7 +1,7 @@
 from sqlalchemy import Table, Column, Integer, String
 from database.dbconnection import engine,metadata
-emp_m = Table(
-    "emp_m",
+vmenu = Table(
+    "v_m_u_m",
     metadata,
     autoload_with=engine,
     schema="public"
