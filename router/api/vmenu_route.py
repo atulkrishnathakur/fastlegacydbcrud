@@ -11,6 +11,7 @@ from sqlalchemy import insert
 from sqlalchemy import update
 from sqlalchemy import delete
 from sqlalchemy import join
+from sqlalchemy import and_, or_
 from fastapi.encoders import jsonable_encoder
 
 router = APIRouter()
@@ -60,5 +61,104 @@ def getVmenuSelectFrom(db:Session = Depends(get_db)):
         results_list = [dict(row._mapping) for row in result] # you can use dict()
         json_data = jsonable_encoder(results_list)
         return json_data
+    except Exception as e:
+        print(f"Exception error {e}")
+
+
+@router.post("/vmenu-insert",name="vmenuinsert")
+def insertVmenu(db:Session = Depends(get_db)):
+    try:
+        # https://docs.sqlalchemy.org/en/20/core/dml.html
+        # https://docs.sqlalchemy.org/en/20/tutorial/data_insert.html
+
+        stmt = insert(vmenu).values(
+            course_id=10,
+            vertica_menu_group_id=1,
+            chapter_heading_main="Inserted By Sqlalchemy Table",
+            menu_name="New menu Name",
+            url_slug="new-menu-name"
+            )
+        db.execute(stmt)
+        db.commit()
+    except Exception as e:
+        print(f"Exception error {e}")
+
+
+@router.post("/vmenu-update",name="vmenuupdate")
+def updateVmenu(db:Session = Depends(get_db)):
+    try:
+        # https://docs.sqlalchemy.org/en/20/core/dml.html
+        # https://docs.sqlalchemy.org/en/20/tutorial/data_insert.html
+        # user for operators: https://docs.sqlalchemy.org/en/20/core/sqlelement.html 
+
+        stmt = update(vmenu).where(
+            vmenu.c.id ==113 
+            ).values(
+            course_id=10,
+            vertica_menu_group_id=1,
+            chapter_heading_main="Inserted By Sqlalchemy Table updated",
+            menu_name="New menu Name updated",
+            url_slug="new-menu-name updatedd"
+            )
+        db.execute(stmt)
+        db.commit()
+    except Exception as e:
+        print(f"Exception error {e}")
+
+
+@router.post("/vmenu-update-and",name="vmenuupdateand")
+def updateVmenubyand(db:Session = Depends(get_db)):
+    try:
+        # https://docs.sqlalchemy.org/en/20/core/dml.html
+        # https://docs.sqlalchemy.org/en/20/tutorial/data_insert.html
+        # user for operators: https://docs.sqlalchemy.org/en/20/core/sqlelement.html 
+
+        stmt = update(vmenu).where(
+            and_(vmenu.c.course_id ==10, vmenu.c.vertica_menu_group_id ==1)
+            ).values(
+            course_id=10,
+            vertica_menu_group_id=1,
+            chapter_heading_main="Inserted By Sqlalchemy Table updated and_ operator",
+            menu_name="New menu Name updated and_ ",
+            url_slug="new-menu-name updatedd and_ "
+            )
+        db.execute(stmt)
+        db.commit()
+    except Exception as e:
+        print(f"Exception error {e}")
+
+
+@router.post("/vmenu-update-or",name="vmenuupdateor")
+def updateVmenubyor(db:Session = Depends(get_db)):
+    try:
+        # https://docs.sqlalchemy.org/en/20/core/dml.html
+        # https://docs.sqlalchemy.org/en/20/tutorial/data_insert.html
+        # user for operators: https://docs.sqlalchemy.org/en/20/core/sqlelement.html 
+
+        stmt = update(vmenu).where(
+            or_(vmenu.c.course_id ==10, vmenu.c.vertica_menu_group_id ==1)
+            ).values(
+            course_id=10,
+            vertica_menu_group_id=1,
+            chapter_heading_main="Inserted By Sqlalchemy Table updated or_ operator",
+            menu_name="New menu Name updated or_ ",
+            url_slug="new-menu-name updatedd or_ "
+            )
+        db.execute(stmt)
+        db.commit()
+    except Exception as e:
+        print(f"Exception error {e}")
+
+
+@router.post("/vmenu-delete",name="vmenudelete")
+def updateVmenubyor(db:Session = Depends(get_db)):
+    try:
+        # https://docs.sqlalchemy.org/en/20/core/dml.html
+        # https://docs.sqlalchemy.org/en/20/tutorial/data_insert.html
+        # user for operators: https://docs.sqlalchemy.org/en/20/core/sqlelement.html 
+
+        stmt = delete(vmenu).where(vmenu.c.id == 113)
+        db.execute(stmt)
+        db.commit()
     except Exception as e:
         print(f"Exception error {e}")
