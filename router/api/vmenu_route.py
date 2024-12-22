@@ -22,7 +22,7 @@ def getVmenu(db:Session = Depends(get_db)):
         # row._mapping is used to correct the format
         stmt = select(vmenu)
         result = db.execute(stmt)
-        # results_list = [row._mapping for row in result] # without dict it also show in dictionary
+        # results_list = [row._mapping for row in result] # without dict it also show data in dictionary
         results_list = [dict(row._mapping) for row in result] # you can use dict()
         json_data = jsonable_encoder(results_list)
         return json_data
